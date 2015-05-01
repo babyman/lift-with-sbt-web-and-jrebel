@@ -9,6 +9,10 @@ addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.5.0")
 //addSbtPlugin("com.earldouglas" % "xsbt-web-plugin" % "0.7.0")
 addSbtPlugin("com.earldouglas" % "xsbt-web-plugin" % "1.1.0")
 
+// jRebel plugin
+// --------------------
+addSbtPlugin("fi.gekkio.sbtplugins" % "sbt-jrebel-plugin" % "0.10.0")
+
 //Enable the sbt idea plugin
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 

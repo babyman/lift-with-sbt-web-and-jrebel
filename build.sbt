@@ -53,3 +53,19 @@ webappSrc in webapp <<= WebKeys.stage in Assets
 
 webInfClasses in webapp := true
 
+
+// jRebel class reload support
+// ------------------------------------------------------------------
+
+seq(jrebelSettings: _*)
+
+jrebel.webLinks += (target in Compile).value / "web/stage"
+
+val JREBEL_HOME = sys.env("JREBEL_HOME")
+
+javaOptions in container ++= Seq(
+  s"-agentpath:$JREBEL_HOME/lib/libjrebel64.dylib",
+  "-noverify",
+  "-XX:+UseConcMarkSweepGC",
+  "-XX:+CMSClassUnloadingEnabled"
+)
