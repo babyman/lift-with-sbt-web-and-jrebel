@@ -4,6 +4,8 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.1")
 
 addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.5.0")
 
+addSbtPlugin("com.slidingautonomy.sbt" % "sbt-filter" % "1.0.1")
+
 // web container plugin - see https://github.com/earldouglas/xwp-template
 // --------------------
 //addSbtPlugin("com.earldouglas" % "xsbt-web-plugin" % "0.7.0")

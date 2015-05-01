@@ -35,7 +35,9 @@ libraryDependencies ++= {
 
 enablePlugins(SbtWeb)
 
-pipelineStages := Seq()
+pipelineStages := Seq(filter)
+
+includeFilter in filter := "*.jsx"
 
 // include stage task when compiling
 compile <<= (compile in Compile) dependsOn WebKeys.stage
@@ -61,10 +63,13 @@ seq(jrebelSettings: _*)
 
 jrebel.webLinks += (target in Compile).value / "web/stage"
 
-val JREBEL_HOME = sys.env("JREBEL_HOME")
+val JREBEL_HOME = sys.env.get("JREBEL_HOME")
 
+jrebel.enabled := JREBEL_HOME.isDefined
+
+// todo this fails if the JREBEL_HOME:Option[String] is Empty
 javaOptions in container ++= Seq(
-  s"-agentpath:$JREBEL_HOME/lib/libjrebel64.dylib",
+  s"-agentpath:${JREBEL_HOME.get}/lib/libjrebel64.dylib",
   "-noverify",
   "-XX:+UseConcMarkSweepGC",
   "-XX:+CMSClassUnloadingEnabled"
