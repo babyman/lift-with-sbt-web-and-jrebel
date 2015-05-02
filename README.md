@@ -9,12 +9,20 @@ my ~/.bash_profile:
 
     export JREBEL_HOME=$HOME/bin/jrebel
 
-To launch lift execute the ./sbt script and then the following:
-
-    ./sbt
+To launch lift execute the ./sbt script to load sbt, then the following to start the web server and compile source on
+file changes:
 
     clean
     ; container:start ; ~compile
+
+
+# Further Improvements / Shaky stuff
+
+Currently you **must** have jRebel installed and working for container:start to succeed, I have some notes in the build.sbt
+file regarding this but I have to do some sbt research to make this happen...
+
+Sbt currently always generates a rebel.xml file, even when packaging a war file for deployment, as per the jRebel sbt plugin
+this should be avoided (https://github.com/Gekkio/sbt-jrebel-plugin#features).
 
 # Changes
 
@@ -47,9 +55,47 @@ Pointed unmanagedResourceDirectories to target/web/stage instead of /src/main/we
 
 ### sbt-web
 
+Enable the sbt-web plugin, define the pipeline and configure the filter to exclude ReactJS source files when copying the
+compile results.  Finally hook the sbt-web stage task into the more general sbt compile task.
+
+    enablePlugins(SbtWeb)
+
+    pipelineStages := Seq(filter)
+
+    includeFilter in filter := "*.jsx"
+
+    // include stage task when compiling
+    compile <<= (compile in Compile) dependsOn WebKeys.stage
+
+
 ### xsbt-web-plugin
 
+Load Jetty and point its source directory setting to the sbt-web stage directory instead of /src/main/webapp
+(see http://stackoverflow.com/questions/29154360/how-can-sbt-web-output-be-used-with-xsbt-web-plugin-via-a-sbt-project-dependency):
+
+    enablePlugins(XwpJetty)
+
+    webappSrc in webapp <<= WebKeys.stage in Assets
+
+
 ### sbt-jrebel-plugin
+
+Setup jRebel as per the instructions [here](https://github.com/earldouglas/xsbt-web-plugin#using-jrebel) except point the weblinks setting to the
+sbt-web stage directory and use an environment variable to find the jRebel agent:
+
+    seq(jrebelSettings: _*)
+
+    jrebel.webLinks += (target in Compile).value / "web/stage"
+
+    val JREBEL_HOME = sys.env.get("JREBEL_HOME")
+
+    jrebel.enabled := JREBEL_HOME.isDefined
+
+    javaOptions in container ++= Seq(
+      s"-agentpath:${JREBEL_HOME.get}/lib/libjrebel64.dylib",
+      "-noverify",
+      "-XX:+UseConcMarkSweepGC",
+      "-XX:+CMSClassUnloadingEnabled"
 
 ## Scala code
 
@@ -64,11 +110,3 @@ picked up without a container restart.
 
 Changes to the template files and other static resources saved in /src/main/public (rather than the usual /src/main/webapp) should
 also be picked up and applied, again without a container restart.
-
-# Improvements / Shaky stuff
-
-Currently you **must** have jRebel installed and working for container:start to succeed, I have some notes in the build.sbt
-file regarding this but I have to do some sbt research to make this happen...
-
-Sbt currently always generates a rebel.xml file, even when packaging a war file for deployment, as per the jRebel sbt plugin
-this should be avoided.
