@@ -3,6 +3,7 @@
 # make sure env variable is defined eg - JREBEL_HOME=$HOME/bin/jrebel
 #
 #  -Drebel.log=true \
+#
 
 #
 # current version

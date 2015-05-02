@@ -67,10 +67,32 @@ val JREBEL_HOME = sys.env.get("JREBEL_HOME")
 
 jrebel.enabled := JREBEL_HOME.isDefined
 
-// todo this fails if the JREBEL_HOME:Option[String] is Empty
 javaOptions in container ++= Seq(
   s"-agentpath:${JREBEL_HOME.get}/lib/libjrebel64.dylib",
   "-noverify",
   "-XX:+UseConcMarkSweepGC",
   "-XX:+CMSClassUnloadingEnabled"
+
+/*
+ * todo this fails if the JREBEL_HOME:Option[String] is Empty
+ *
+ * Ideally something like this would be nice...
+ *
+ * JREBEL_HOME.map(home => {
+ *
+ *   seq(jrebelSettings: _*)
+ *
+ *   jrebel.webLinks += (target in Compile).value / "web/stage"
+ *
+ *   jrebel.enabled := true
+ *
+ *   javaOptions in container ++= Seq(
+ *     s"-agentpath:$home/lib/libjrebel64.dylib",
+ *     "-noverify",
+ *     "-XX:+UseConcMarkSweepGC",
+ *     "-XX:+CMSClassUnloadingEnabled"
+ *   )
+ * })
+ *
+ */
 )
