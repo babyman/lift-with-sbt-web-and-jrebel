@@ -53,8 +53,6 @@ enablePlugins(XwpJetty)
 // set the webapp source to match sbt-webs output
 webappSrc in webapp <<= WebKeys.stage in Assets
 
-webInfClasses in webapp := true
-
 
 // jRebel class reload support
 // ------------------------------------------------------------------
