@@ -1,6 +1,6 @@
 # Lift with sbt-web and jRebel
 
-My attempt to configure [lift](http://liftweb.net/) with [sbt-web](https://github.com/sbt/sbt-web) asset processing and hot class and resource deployment
+My attempt to configure [Lift](http://liftweb.net/) with [sbt-web](https://github.com/sbt/sbt-web) asset processing and hot class and resource deployment
 with [jRebel](http://zeroturnaround.com/software/jrebel/).
 
 # Quick-start
