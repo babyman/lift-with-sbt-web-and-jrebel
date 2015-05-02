@@ -22,12 +22,15 @@ Upgraded sbt-launch-xx.jar to 0.13.8 to support enablePlugins(...)
 
 ## project/plugins.sbt
 
-Added the following plugins:
+Added the following sbt-web plugins and resolver:
 
     resolvers += Resolver.typesafeRepo("releases")
     addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.1.1")
     addSbtPlugin("com.github.ddispaltro" % "sbt-reactjs" % "0.5.0")
     addSbtPlugin("com.slidingautonomy.sbt" % "sbt-filter" % "1.0.1")
+
+Add the jRebel sbt plugin:
+
     addSbtPlugin("fi.gekkio.sbtplugins" % "sbt-jrebel-plugin" % "0.10.0")
 
 
@@ -42,7 +45,11 @@ Pointed unmanagedResourceDirectories to target/web/stage instead of /src/main/we
 
     unmanagedResourceDirectories in Test <+= target { _ / "web/stage" }
 
+### sbt-web
 
+### xsbt-web-plugin
+
+### sbt-jrebel-plugin
 
 ## Scala code
 
